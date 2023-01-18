@@ -22,7 +22,11 @@ module.exports = {
     withDefaults: 'readonly',
   },
   rules: {
-    "indent": ["error", 2],
+    'indent': [
+      'error', 2, {
+        'SwitchCase': 1,
+      },
+    ],
     '@typescript-eslint/ban-ts-comment': [
       'error', {
         'ts-expect-error': 'allow-with-description',

@@ -1,3 +1,2 @@
-export * from './sayHello'
-export * from './sayWorld'
-export * from './reactiveFn'
+export * from './fast-axios'
+export * from './request-cache'

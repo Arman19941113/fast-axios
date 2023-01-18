@@ -1,14 +1,14 @@
 {
   "name": "fast-axios",
   "version": "0.0.0",
-  "description": "",
-  "keywords": [],
-  "homepage": "",
+  "description": "Promise based HTTP client",
+  "keywords": ["HTTP client", "XMLHttpRequest"],
+  "homepage": "https://github.com/Arman19941113/fast-axios",
   "license": "MIT",
-  "author": "",
+  "author": "Arman Tang",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/Arman19941113/fast-axios"
   },
   "files": [
     "dist"
@@ -21,7 +21,7 @@
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "peerDependencies": {
-    "vue": "^3.2.0"
+    "axios": "^1.2.0"
   },
   "engines": {
     "node": ">=14"
