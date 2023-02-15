@@ -85,8 +85,7 @@ try {
 
 // run tests before release
 stepLog('\nRunning tests...')
-run('jest --clearCache')
-run('jest --bail')
+run('pnpm run test')
 
 // Build the package.
 stepLog('\nBuilding the package...')
