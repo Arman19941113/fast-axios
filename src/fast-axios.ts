@@ -1,4 +1,10 @@
-import axios, { AxiosInstance, CreateAxiosDefaults, RawAxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, {
+  AxiosInstance,
+  CreateAxiosDefaults,
+  RawAxiosRequestConfig,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios'
 import { RequestCache, RequestConfig } from './request-cache'
 
 export interface UserConfig extends RawAxiosRequestConfig {
@@ -6,11 +12,23 @@ export interface UserConfig extends RawAxiosRequestConfig {
   cancelWhenClearing?: boolean
 }
 
+export interface FastAxiosConfig {
+  onReqFulfilled?: ((config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig>) | null
+  onReqRejected?: ((error: any) => any) | null
+  onResFulfilled?: ((config: AxiosResponse) => AxiosResponse | Promise<AxiosResponse>) | null
+  onResRejected?: ((error: any) => any) | null
+}
+
 export class FastAxios {
   axiosInstance: AxiosInstance
   requestCache: RequestCache
 
-  constructor (createAxiosConfig: CreateAxiosDefaults) {
+  constructor (createAxiosConfig: CreateAxiosDefaults, {
+    onReqFulfilled,
+    onReqRejected,
+    onResFulfilled,
+    onResRejected,
+  }: FastAxiosConfig = {}) {
     const axiosInstance = axios.create(createAxiosConfig)
     const requestCache = new RequestCache()
 
@@ -18,27 +36,23 @@ export class FastAxios {
       // Do something before request is sent
       requestCache.cancelRepeatedRequest((config as RequestConfig)._requestId)
       requestCache.add(config as RequestConfig)
-      return config
+      return onReqFulfilled ? onReqFulfilled(config) : config
     }, function (error) {
       // Do something with request error
-      return Promise.reject(error)
+      return onReqRejected ? onReqRejected(error) : Promise.reject(error)
     })
 
     axiosInstance.interceptors.response.use(function (response) {
       // Any status code that lie within the range of 2xx cause this function to trigger
       // Do something with response data
       requestCache.delete(response.config as RequestConfig)
-      return response
+      return onResFulfilled ? onResFulfilled(response) : response
     }, function (error) {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
-      if (error.code === 'ERR_CANCELED') {
-        // Canceled error
-      } else {
-        // Other errors
-      }
+      // For canceled request: error.code === 'ERR_CANCELED'
       requestCache.delete(error.config as RequestConfig)
-      return Promise.reject(error)
+      return onResRejected ? onResRejected(error) : Promise.reject(error)
     })
 
     this.axiosInstance = axiosInstance
