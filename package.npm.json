@@ -1,8 +1,11 @@
 {
   "name": "@armantang/fast-axios",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "description": "Promise based HTTP client",
-  "keywords": ["HTTP client", "XMLHttpRequest"],
+  "keywords": [
+    "HTTP client",
+    "XMLHttpRequest"
+  ],
   "homepage": "https://github.com/Arman19941113/fast-axios",
   "license": "MIT",
   "author": "Arman Tang",
