@@ -22,6 +22,14 @@ const http = new FastAxios({
     'X-Requested-With': 'XMLHttpRequest',
   },
 }, {
+  onReqFulfilled: function(config) {
+    // Do something before request is sent
+    return config
+  },
+  onReqRejected: function(error) {
+    // Do something with request error
+    return Promise.reject(error)
+  },
   onResFulfilled: function(response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
@@ -29,9 +37,20 @@ const http = new FastAxios({
     if (resData.code === 0) {
       return resData
     } else {
-      return Promise.reject(new Error(`${resData.code} ${resData.message}`))
+      const message = `${resData.code} ${resData.message}`
+      messageError(message);
+      return Promise.reject(new Error())
     }
   },
+  onResRejected: function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    // For canceled request: error.code === 'ERR_CANCELED'
+    if (error.code !== 'ERR_CANCELED') {
+      messageError(error.message)
+    }
+    return Promise.reject(error)
+  }
 })
 ```
 
