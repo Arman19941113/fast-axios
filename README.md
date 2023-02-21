@@ -22,15 +22,15 @@ const http = new FastAxios({
     'X-Requested-With': 'XMLHttpRequest',
   },
 }, {
-  onReqFulfilled: function(config) {
+  onReqFulfilled: function (config) {
     // Do something before request is sent
     return config
   },
-  onReqRejected: function(error) {
+  onReqRejected: function (error) {
     // Do something with request error
     return Promise.reject(error)
   },
-  onResFulfilled: function(response) {
+  onResFulfilled: function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     const resData = response.data
@@ -38,8 +38,8 @@ const http = new FastAxios({
       return resData
     } else {
       const message = `${resData.code} ${resData.message}`
-      messageError(message);
-      return Promise.reject(new Error())
+      messageError(message)
+      return Promise.reject(new Error(message))
     }
   },
   onResRejected: function (error) {
@@ -50,7 +50,7 @@ const http = new FastAxios({
       messageError(error.message)
     }
     return Promise.reject(error)
-  }
+  },
 })
 ```
 
