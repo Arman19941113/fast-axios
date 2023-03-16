@@ -1,6 +1,6 @@
 {
   "name": "@armantang/fast-axios",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Promise based HTTP client",
   "keywords": [
     "HTTP client",
